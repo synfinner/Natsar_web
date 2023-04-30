@@ -23,3 +23,5 @@ Put the app_id and app_hash into a .env file, feel free to rename `.env_sample` 
 ## Run
 
 `streamlit run natsar.py`
+
+![](/images/natsar_web_1.jpg)
