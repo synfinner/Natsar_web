@@ -26,6 +26,10 @@ def addSidebar():
     st.sidebar.title("Natsar")
     # add horizontal line
     st.sidebar.markdown("---")
+    st.sidebar.markdown("**Bot token:** *(escape the colon in the bot token)*:")
+    global bot_token
+    bot_token = st.sidebar.text_input("token datas",label_visibility="collapsed",placeholder="71xxxxxxx4\:BAJxxxxxxxxxe43")
+    st.sidebar.markdown("---")
     st.sidebar.write("A python script for extracting telegram data from the bot API and obtaining user data via the Telethon library")
     st.sidebar.write("This is a work in progress")
     st.sidebar.write("Based on my terminal Natsar client: [Repository](https://github.com/synfinner/Natsar)")
@@ -33,10 +37,7 @@ def addSidebar():
 
 # function for performing the extraction given a bot token
 def extractData():
-    # add markdown
-    st.markdown("Enter your bot token below *(you must escape the colon in the bot token)*:")
     # add a text input for the bot token
-    bot_token = st.text_input("token data",label_visibility="collapsed",placeholder="71xxxxxxx2\:BAJxxxxxxxxxe43")
     # if the inputted data is not empty and does not contain a \, return an error
     if bot_token and "\\" not in bot_token:
         st.error("Error: Invalid bot token. You must escape the colon in the bot token.")
@@ -50,6 +51,7 @@ def extractData():
         col1, col2 = st.columns(2)
         with col1:
             st.header("Bot Info:")
+            st.divider()
             # call the get_bot_info function and assign it to a variable of botInfo
             botInfo = get_bot_info(bot_token2)
             # display the bot info 
@@ -59,6 +61,7 @@ def extractData():
         with col2:
             # call the function to get active users
             st.header("Active Users:")
+            st.divider()
             botUsers = getUsernames(bot_token2)
             # dynamically display the usernames
             for i in range(len(botUsers)):
@@ -66,6 +69,7 @@ def extractData():
         with st.container():
             # call function to get file links and display them
             st.header("File Links:")
+            st.divider()
             # create a bot object
             bot = tg.TelegramBot(bot_token2)
             # call the get_tg_files function and assign it to a variable of fileLinks
