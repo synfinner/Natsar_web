@@ -27,6 +27,7 @@ def addSidebar():
     # add horizontal line
     st.sidebar.markdown("---")
     st.sidebar.markdown("**Bot token:** *(escape the colon in the bot token)*:")
+    # add a text input for the bot token to the sidebar and assign it as a global variable
     global bot_token
     bot_token = st.sidebar.text_input("token datas",label_visibility="collapsed",placeholder="71xxxxxxx4\:BAJxxxxxxxxxe43")
     st.sidebar.markdown("---")
@@ -46,43 +47,66 @@ def extractData():
     if bot_token and "\\" in bot_token:
         # assign the bot token to a variable that removes the \ character
         bot_token2 = bot_token.replace("\\","")
-        st.info("Your bot token is: {}".format(bot_token))
-        # clear the sidebar and show the bot token
-        col1, col2 = st.columns(2)
-        with col1:
-            st.header("Bot Info:")
-            st.divider()
-            # call the get_bot_info function and assign it to a variable of botInfo
-            botInfo = get_bot_info(bot_token2)
-            # display the bot info 
-            st.markdown(f"**Bot Username:** {botInfo[0]}")
-            st.markdown(f"**Bot First Name:** {botInfo[1]}")
-            st.markdown(f"**Bot ID:** {botInfo[2]}")
-        with col2:
-            # call the function to get active users
-            st.header("Active Users:")
-            st.divider()
-            botUsers = getUsernames(bot_token2)
-            # dynamically display the usernames
-            for i in range(len(botUsers)):
-                st.markdown(f"**User {i+1}:** {botUsers[i]}")
+        st.info("Entered Bot Token: {}".format(bot_token))
+        # create a column container for the displayed information
+        telegram_columns = st.container()
+        # set the height of the container to 100px and add a scroll bar
+        telegram_columns.markdown("<style>div.css-1l02zno{height: 100px; overflow-y: scroll;}</style>",
+    unsafe_allow_html=True,
+        )
+        with telegram_columns:
+            # Setup the columns for data display
+            col1, col2 = st.columns(2)
+            with col1:
+                st.header("Bot Info:")
+                st.divider()
+                # add a spinner to indicate that the bot info is being retrieved
+                with st.spinner("Retrieving bot info..."):
+                    # call the get_bot_info function and assign it to a variable of botInfo
+                    botInfo = get_bot_info(bot_token2)
+                    # display the bot info 
+                    st.markdown(f"**Bot Username:** {botInfo[0]}")
+                    st.markdown(f"**Bot First Name:** {botInfo[1]}")
+                    st.markdown(f"**Bot ID:** {botInfo[2]}")
+            with col2:
+                # call the function to get active users
+                st.header("Active Users:")
+                st.divider()
+                # add a spinner to indicate that the active users are being retrieved
+                with st.spinner("Retrieving active users..."):
+                    try:
+                        botUsers = getUsernames(bot_token2)
+                    except Exception as e:
+                        st.exception(e)
+                    # dynamically display the usernames
+                    if len(botUsers) == 0:
+                        st.markdown("**No active users found**")
+                    for i in range(len(botUsers)):
+                        st.markdown(f"**User {i+1}:** {botUsers[i]}")
+        # create a container for the file links outside of the columns
         with st.container():
             # call function to get file links and display them
             st.header("File Links:")
             st.divider()
-            # create a bot object
-            bot = tg.TelegramBot(bot_token2)
-            # call the get_tg_files function and assign it to a variable of fileLinks
-            fileLinks = bot.get_tg_files()
-            for i in range(len(fileLinks)):
-                st.markdown(f"**File {i+1}:** {fileLinks[i]}")
+            with st.spinner("Retrieving file links..."):
+                # create a bot object
+                try:
+                    bot = tg.TelegramBot(bot_token2)
+                except Exception as e:
+                    st.exception(e)
+                # call the get_tg_files function and assign it to a variable of fileLinks
+                fileLinks = bot.get_tg_files()
+                if len(fileLinks) == 0:
+                    st.markdown("**No file links found**")
+                for i in range(len(fileLinks)):
+                    st.markdown(f"**File {i+1}:** {fileLinks[i]}")
 
-            
-
+# main function
 if __name__ == "__main__":
+    # set the page config
     st.set_page_config(
     page_title="Natsar Web",
-    page_icon="👋",
+    page_icon="❤️",
 )
     # check if there is a natsar.session file. If not, return an error
     try:
