@@ -41,7 +41,7 @@ def extractData():
     # if the inputted data is not empty and does not contain a \, return an error
     if bot_token and "\\" not in bot_token:
         st.error("Error: Invalid bot token. You must escape the colon in the bot token.")
-        st.error("Erros: Add a \ before the : character in your bot token!! This is a limitation of streamlit.")
+        st.error("Error: Add a \ before the : character in your bot token!! This is a limitation of streamlit.")
     # add a message box to display bot token if bot_token
     if bot_token and "\\" in bot_token:
         # assign the bot token to a variable that removes the \ character
