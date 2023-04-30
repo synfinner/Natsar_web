@@ -7,6 +7,11 @@ from telethon import TelegramClient, events, sync
 from pathlib import Path
 from dotenv import load_dotenv
 
+# check if the .env file exists
+if not os.path.exists('.env'):
+    print('Please create a .env file with your telegram API keys. Read the README.md.')
+    exit(1)
+
 # load the environment variables
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
