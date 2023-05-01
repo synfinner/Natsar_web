@@ -99,7 +99,7 @@ def extractData():
                 if len(fileLinks) == 0:
                     st.markdown("**No file links found**")
                 for i in range(len(fileLinks)):
-                    st.markdown(f"**File {i+1}:** {fileLinks[i]}")
+                    st.markdown(f"**File {i+1}:** {fileLinks[i]} -- [Download](https://api.telegram.org/file/bot{bot_token2}/{fileLinks[i]})")
 
 # main function
 if __name__ == "__main__":
