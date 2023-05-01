@@ -24,10 +24,18 @@ Put the app_id and app_hash into a .env file, feel free to rename `.env_sample` 
 
 `streamlit run natsar.py`
 
-![](/images/image_2.jpg)
+![](/images/page1.jpg)
+
+## Telegram Bot Info Gathering
+
+![](/images/bot_data.jpg)
 
 ### Downloading files
 
 If files are found within the bot, Natsar will retrieve the downloadable link and present it to you: 
 
 ![](/images/file_download.jpg)
+
+## Channel Intel
+
+Coming soon ;)

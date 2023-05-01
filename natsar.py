@@ -24,82 +24,23 @@ def getUsernames(bot_token):
 def addSidebar():
     # add a sidebar to the app
     st.sidebar.title("Natsar")
-    # add horizontal line
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("**Bot token:** *(escape the colon in the bot token)*:")
-    # add a text input for the bot token to the sidebar and assign it as a global variable
-    global bot_token
-    bot_token = st.sidebar.text_input("token datas",label_visibility="collapsed",placeholder="71xxxxxxx4\:BAJxxxxxxxxxe43")
-    st.sidebar.markdown("---")
     st.sidebar.write("A python script for extracting telegram data from the bot API and obtaining user data via the Telethon library")
     st.sidebar.write("This is a work in progress")
     st.sidebar.write("Based on my terminal Natsar client: [Repository](https://github.com/synfinner/Natsar)")
     st.sidebar.write("Created with ♥️ by [synfinner](https://twitter.com/synfinner)")
 
-# function for performing the extraction given a bot token
-def extractData():
-    # add a text input for the bot token
-    # if the inputted data is not empty and does not contain a \, return an error
-    if bot_token and "\\" not in bot_token:
-        st.error("Error: Invalid bot token. You must escape the colon in the bot token.")
-        st.error("Error: Add a \ before the : character in your bot token!! This is a limitation of streamlit.")
-    # add a message box to display bot token if bot_token
-    if bot_token and "\\" in bot_token:
-        # assign the bot token to a variable that removes the \ character
-        bot_token2 = bot_token.replace("\\","")
-        st.info("Entered Bot Token: {}".format(bot_token))
-        # create a column container for the displayed information
-        telegram_columns = st.container()
-        # set the height of the container to 100px and add a scroll bar
-        telegram_columns.markdown("<style>div.css-1l02zno{height: 100px; overflow-y: scroll;}</style>",
-    unsafe_allow_html=True,
-        )
-        with telegram_columns:
-            # Setup the columns for data display
-            col1, col2 = st.columns(2)
-            with col1:
-                st.header("Bot Info:")
-                st.divider()
-                # add a spinner to indicate that the bot info is being retrieved
-                with st.spinner("Retrieving bot info..."):
-                    # call the get_bot_info function and assign it to a variable of botInfo
-                    botInfo = get_bot_info(bot_token2)
-                    # display the bot info 
-                    st.markdown(f"**Bot Username:** {botInfo[0]}")
-                    st.markdown(f"**Bot First Name:** {botInfo[1]}")
-                    st.markdown(f"**Bot ID:** {botInfo[2]}")
-            with col2:
-                # call the function to get active users
-                st.header("Active Users:")
-                st.divider()
-                # add a spinner to indicate that the active users are being retrieved
-                with st.spinner("Retrieving active users..."):
-                    try:
-                        botUsers = getUsernames(bot_token2)
-                    except Exception as e:
-                        st.exception(e)
-                    # dynamically display the usernames
-                    if len(botUsers) == 0:
-                        st.markdown("**No active users found**")
-                    for i in range(len(botUsers)):
-                        st.markdown(f"**User {i+1}:** {botUsers[i]}")
-        # create a container for the file links outside of the columns
-        with st.container():
-            # call function to get file links and display them
-            st.header("File Links:")
-            st.divider()
-            with st.spinner("Retrieving file links..."):
-                # create a bot object
-                try:
-                    bot = tg.TelegramBot(bot_token2)
-                except Exception as e:
-                    st.exception(e)
-                # call the get_tg_files function and assign it to a variable of fileLinks
-                fileLinks = bot.get_tg_files()
-                if len(fileLinks) == 0:
-                    st.markdown("**No file links found**")
-                for i in range(len(fileLinks)):
-                    st.markdown(f"**File {i+1}:** {fileLinks[i]} -- [Download](https://api.telegram.org/file/bot{bot_token2}/{fileLinks[i]})")
+# function for the content of first app page
+def content():
+    st.title("Natsar Web")
+    # add horizontal line
+    st.markdown("---")
+    st.markdown("""
+## What is Natsar?
+Natsar is a python script for extracting telegram data from the bot API and obtaining user data via the Telethon library. This is a work in progress and is based on my terminal Natsar client
+
+## How to use
+If you didn't already, run the `natsar_init.py` script to create a `natsar.session` file. This is required for API usage. Alternatively, you can use the Bot Info page without a session file or client keys, as it only requires an obtained bot token.
+    """)
 
 # main function
 if __name__ == "__main__":
@@ -114,10 +55,6 @@ if __name__ == "__main__":
             pass
     except FileNotFoundError:
         st.error("Error: natsar.session file not found. Please run the natsar_init.py script first!")
-    st.title("Telegram Data Extraction")
-    # add horizontal line
-    st.markdown("---")
-    # call the addSidebarfunction to set up the sidebar
     addSidebar()
-    # call the extractData function to perform the extraction
-    extractData()
+    content()
+    
